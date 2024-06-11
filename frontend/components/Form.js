@@ -127,7 +127,7 @@ export default function Form() {
         ))}
     </div>
       {/* 👇 Make sure the submit stays disabled until the form validates! */ }
-  <input type="submit" disabled={!isValid/>
+  <input type="submit" disabled={!isValid}/>
     </form >
   );
 }
