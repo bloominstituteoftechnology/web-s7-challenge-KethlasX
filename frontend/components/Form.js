@@ -4,8 +4,8 @@ import * as Yup from 'yup';
 
 // 👇 Here are the validation errors you will use with Yup.
 const validationErrors = {
-  fullNameTooShort: 'full name must be at least 3 characters',
-  fullNameTooLong: 'full name must be at most 20 characters',
+  fullNameTooShort: 'fullname must be at least 3 characters',
+  fullNameTooLong: 'fullname must be at most 20 characters',
   sizeIncorrect: 'size must be S or M or L'
 }
 
