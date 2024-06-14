@@ -94,14 +94,14 @@ export default function Form() {
     <form onSubmit={handleSubmit}>
       <h2>Order Your Pizza</h2>
       {submitted && orderDetails && (
-        <div className='success'>
-          Thank you for your order, {orderDetails.fullname}!<br />
-          Your {orderDetails.size.toLowerCase()} pizza<br />
-          {orderDetails.toppings === 0
-            ? 'with no toppings'
-            : `with ${orderDetails.toppings} topping${orderDetails.toppings > 1 ? 's' : ''}`}
-        </div>
-      )}
+  <div className='success'>
+    Thank you for your order, {orderDetails.fullname}!<br />
+    Your {orderDetails.size.toLowerCase()} pizza<br />
+    {orderDetails.toppings.length === 0
+      ? 'with no toppings'
+      : `with these toppings: ${orderDetails.toppings.join(', ')}`}
+  </div>
+)}
       {!submitted && !isValid && <div className='failure'>Something went wrong</div>}
 
       <div className="input-group">
