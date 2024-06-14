@@ -80,7 +80,6 @@ export default function Form() {
 
   return (
     <form>
-      {/* THIS RIGHT HERE NEEDS FIX */}
       <h2>Order Your Pizza</h2>
       {isValid && <div className='success'>Thank you for your order!</div>}
       {!isValid && <div className='failure'>Something went wrong</div>}
@@ -97,7 +96,7 @@ export default function Form() {
             onChange={handleChange}
           />
         </div>
-        {errors.fullName && <div className='error'>{errors.fullName}</div>}
+        {errors.fullname && <div className='error'>{errors.fullname}</div>}
       </div>
 
       <div className="input-group">
