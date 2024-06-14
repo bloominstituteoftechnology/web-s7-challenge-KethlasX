@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 // Validation errors using Yup
 const validationErrors = {
   fullNameTooShort: 'full name must be at least 3 characters',
-  fullNameTooLong: 'full name must be at most 20 characters',
   sizeIncorrect: 'size must be S or M or L'
 };
 
@@ -12,7 +11,6 @@ const validationErrors = {
 const validationSchema = Yup.object().shape({
   fullname: Yup.string()
     .min(3, validationErrors.fullNameTooShort)
-    .max(20, validationErrors.fullNameTooLong)
     .required('Full name is required'),
   size: Yup.string()
     .oneOf(['S', 'M', 'L'], validationErrors.sizeIncorrect)
@@ -39,7 +37,7 @@ export default function Form() {
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [orderDetails, setOrderDetails] = useState({});
+  const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
     validationSchema
@@ -88,13 +86,14 @@ export default function Form() {
         toppings: []
       });
       setIsValid(false); // To disable the submit button after form reset
+      setErrors({}); // Clear any existing errors
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Order Your Pizza</h2>
-      {submitted && (
+      {submitted && orderDetails && (
         <div className='success'>
           Thank you for your order, {orderDetails.fullname}!<br />
           Your {orderDetails.size.toLowerCase()} pizza<br />
