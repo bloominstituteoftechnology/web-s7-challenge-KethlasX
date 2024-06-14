@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
-// 👇 Here are the validation errors you will use with Yup.
+// Validation errors using Yup
 const validationErrors = {
   fullNameTooShort: 'full name must be at least 3 characters',
   fullNameTooLong: 'full name must be at most 20 characters',
   sizeIncorrect: 'size must be S or M or L'
-}
+};
 
-// 👇 Here you will create your schema.
+// Validation schema
 const validationSchema = Yup.object().shape({
   fullname: Yup.string()
     .min(3, validationErrors.fullNameTooShort)
@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
   toppings: Yup.array().of(Yup.string())
 });
 
-// 👇 This array could help you construct your checkboxes using .map in the JSX.
+// Toppings array
 const toppings = [
   { topping_id: '1', text: 'Pepperoni' },
   { topping_id: '2', text: 'Green Peppers' },
@@ -53,7 +53,7 @@ export default function Form() {
         setErrors(newErrors);
         setIsValid(false);
       });
-  }, [formData])
+  }, [formData]);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -81,6 +81,13 @@ export default function Form() {
         size: formData.size,
         toppings: formData.toppings.length
       });
+      // Clear the form after submission
+      setFormData({
+        fullname: '',
+        size: '',
+        toppings: []
+      });
+      setIsValid(false); // To disable the submit button after form reset
     }
   };
 
@@ -91,7 +98,9 @@ export default function Form() {
         <div className='success'>
           Thank you for your order, {orderDetails.fullname}!<br />
           Your {orderDetails.size.toLowerCase()} pizza<br />
-          with {orderDetails.toppings} toppings
+          {orderDetails.toppings === 0
+            ? 'with no toppings'
+            : `with ${orderDetails.toppings} topping${orderDetails.toppings > 1 ? 's' : ''}`}
         </div>
       )}
       {!submitted && !isValid && <div className='failure'>Something went wrong</div>}
@@ -138,8 +147,8 @@ export default function Form() {
           </label>
         ))}
       </div>
-      {/* 👇 Make sure the submit stays disabled until the form validates! */}
-      <input type="submit" disabled={!isValid}/>
+      {/* Make sure the submit stays disabled until the form validates! */}
+      <input type="submit" disabled={!isValid} />
     </form>
   );
 }
