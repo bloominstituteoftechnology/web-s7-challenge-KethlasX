@@ -1,11 +1,10 @@
-import { isValid } from 'ipaddr.js';
 import React, { useEffect, useState } from 'react'
 import * as Yup from 'yup';
 
 // 👇 Here are the validation errors you will use with Yup.
 const validationErrors = {
-  fullNameTooShort: 'fullname must be at least 3 characters',
-  fullNameTooLong: 'fullname must be at most 20 characters',
+  fullNameTooShort: 'full name must be at least 3 characters',
+  fullNameTooLong: 'full name must be at most 20 characters',
   sizeIncorrect: 'size must be S or M or L'
 }
 
@@ -39,6 +38,8 @@ export default function Form() {
 
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [orderDetails, setOrderDetails] = useState({});
 
   useEffect(() => {
     validationSchema
@@ -60,8 +61,8 @@ export default function Form() {
       setFormData(prev => ({
         ...prev,
         toppings: checked
-        ? [...prev.toppings, value]
-        : prev.toppings.filter(t => t !== value)
+          ? [...prev.toppings, value]
+          : prev.toppings.filter(t => t !== value)
       }));
     } else {
       setFormData(prev => ({
@@ -74,15 +75,26 @@ export default function Form() {
   const handleSubmit = e => {
     e.preventDefault();
     if (isValid) {
-      console.log('Form data:', formData);
+      setSubmitted(true);
+      setOrderDetails({
+        fullname: formData.fullname,
+        size: formData.size,
+        toppings: formData.toppings.length
+      });
     }
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h2>Order Your Pizza</h2>
-      {isValid && <div className='success'>Thank you for your order!</div>}
-      {!isValid && <div className='failure'>Something went wrong</div>}
+      {submitted && (
+        <div className='success'>
+          Thank you for your order, {orderDetails.fullname}!<br />
+          Your {orderDetails.size.toLowerCase()} pizza<br />
+          with {orderDetails.toppings} toppings
+        </div>
+      )}
+      {!submitted && !isValid && <div className='failure'>Something went wrong</div>}
 
       <div className="input-group">
         <div>
@@ -125,9 +137,9 @@ export default function Form() {
             {topping.text}<br />
           </label>
         ))}
-    </div>
-      {/* 👇 Make sure the submit stays disabled until the form validates! */ }
-  <input type="submit" disabled={!isValid}/>
-    </form >
+      </div>
+      {/* 👇 Make sure the submit stays disabled until the form validates! */}
+      <input type="submit" disabled={!isValid}/>
+    </form>
   );
 }
