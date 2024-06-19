@@ -11,7 +11,7 @@ const validationErrors = {
 const validationSchema = Yup.object().shape({
   fullname: Yup.string()
     .min(3, validationErrors.fullNameTooShort)
-    .required('Full name is required'),
+    .required('Full name must be at least 3 characters'),
   size: Yup.string()
     .oneOf(['S', 'M', 'L'], validationErrors.sizeIncorrect)
     .required('Size is required'),
