@@ -39,22 +39,21 @@ export default function Form() {
   const [submitted, setSubmitted] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
 
-  useEffect(() => {
-    validationSchema
-      .validate(formData, { abortEarly: false })
-      .then(() => setIsValid(true))
-      .catch(err => {
-        const newErrors = {};
-        err.inner.forEach(e => {
-          newErrors[e.path] = e.message;
-        });
-        setErrors(newErrors);
-        setIsValid(false);
-      });
-  }, [formData]);
-
+  console.log(errors)
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
+    Yup
+    .reach(validationSchema, name)
+    .validate(value)
+    .then(() => {
+      // If value is valid, the corresponding error message will be deleted
+      setErrors({ ...errors, [name]: "" });
+    })
+    .catch((err) => {
+      // If invalid, we update the error message with the text returned by Yup
+      // This error message was hard-coded in the schema
+      setErrors({ ...errors, [name]: err.errors[0] });
+    });
     if (type === 'checkbox') {
       setFormData(prev => ({
         ...prev,
@@ -69,6 +68,12 @@ export default function Form() {
       }));
     }
   };
+
+  useEffect(() => {
+    validationSchema.isValid(formData).then((isValid) => {
+      setIsValid(isValid);
+    });
+  }, [formData]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -89,19 +94,19 @@ export default function Form() {
       setErrors({}); // Clear any existing errors
     }
   };
-
+  console.log(orderDetails)
   return (
     <form onSubmit={handleSubmit}>
       <h2>Order Your Pizza</h2>
       {submitted && orderDetails && (
-  <div className='success'>
-    Thank you for your order, {orderDetails.fullname}!<br />
-    Your {orderDetails.size.toLowerCase()} pizza<br />
-    {orderDetails.toppings.length === 0
-      ? 'with no toppings'
-      : `with these toppings: ${orderDetails.toppings.join(', ')}`}
-  </div>
-)}
+        <div className='success'>
+          Thank you for your order, {orderDetails.fullname}!<br />
+          Your {orderDetails.size.toLowerCase()} pizza
+          {orderDetails.toppings.length === 0
+            ? ' with no toppings'
+            : ` with ${orderDetails.toppings} toppings. `}
+        </div>
+      )}
       {!submitted && !isValid && <div className='failure'>Something went wrong</div>}
 
       <div className="input-group">
