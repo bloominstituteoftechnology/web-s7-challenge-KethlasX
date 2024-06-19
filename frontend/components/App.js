@@ -7,7 +7,7 @@ function App() {
   return (
     <div id="app">
       <nav>
-        <NavLink to="/" exact>
+        <NavLink to="/" >
           Home
         </NavLink>
         <NavLink to="/order">

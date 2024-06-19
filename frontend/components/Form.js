@@ -11,7 +11,7 @@ const validationErrors = {
 const validationSchema = Yup.object().shape({
   fullname: Yup.string()
     .min(3, validationErrors.fullNameTooShort)
-    .required('Full name must be at least 3 characters'),
+    .required(),
   size: Yup.string()
     .oneOf(['S', 'M', 'L'], validationErrors.sizeIncorrect)
     .required('Size is required'),
@@ -101,7 +101,7 @@ export default function Form() {
         <div className='success'>
           Thank you for your order, {orderDetails.fullname}!<br />
           Your {pizzaSizes[orderDetails.size.toLowerCase()]} pizza
-          {orderDetails.toppings.length === 0
+          {orderDetails.toppings === 0
             ? ' with no toppings'
             : ` with ${orderDetails.toppings} toppings. `}
         </div>
@@ -116,7 +116,7 @@ export default function Form() {
             id="fullName"
             name="fullname"
             type="text"
-            value={formData.fullname}
+            value={formData.fullname.trim()}
             onChange={handleChange}
           />
         </div>
