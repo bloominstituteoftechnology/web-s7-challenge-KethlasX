@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
     .min(3, validationErrors.fullNameTooShort)
     .required('Full name must be at least 3 characters'),
   size: Yup.string()
-    .oneOf(['S', 'M', 'L'], validationErrors.sizeIncorrect)
+    .oneOf(['small', 'medium', 'large'], validationErrors.sizeIncorrect)
     .required('Size is required'),
   toppings: Yup.array().of(Yup.string())
 });
@@ -39,7 +39,6 @@ export default function Form() {
   const [submitted, setSubmitted] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
 
-  console.log(errors)
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
     Yup
@@ -94,7 +93,6 @@ export default function Form() {
       setErrors({}); // Clear any existing errors
     }
   };
-  console.log(orderDetails)
   return (
     <form onSubmit={handleSubmit}>
       <h2>Order Your Pizza</h2>
@@ -129,9 +127,9 @@ export default function Form() {
           <label htmlFor="size">Size</label><br />
           <select id="size" name="size" value={formData.size} onChange={handleChange}>
             <option value="">----Choose Size----</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
           </select>
         </div>
         {errors.size && <div className='error'>{errors.size}</div>}
@@ -151,7 +149,6 @@ export default function Form() {
           </label>
         ))}
       </div>
-      {/* Make sure the submit stays disabled until the form validates! */}
       <input type="submit" disabled={!isValid} />
     </form>
   );
