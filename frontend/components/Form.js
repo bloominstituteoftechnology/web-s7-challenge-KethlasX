@@ -42,9 +42,10 @@ export default function Form() {
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
+    const trimmedValue = name === "fullname" ? value.trim():value
     Yup
     .reach(validationSchema, name)
-    .validate(value)
+    .validate(trimmedValue)
     .then(() => {
       // If value is valid, the corresponding error message will be deleted
       setErrors({ ...errors, [name]: "" });
@@ -116,7 +117,7 @@ export default function Form() {
             id="fullName"
             name="fullname"
             type="text"
-            value={formData.fullname.trim()}
+            value={formData.fullname}
             onChange={handleChange}
           />
         </div>
