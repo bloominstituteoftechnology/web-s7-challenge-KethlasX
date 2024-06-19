@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
     .min(3, validationErrors.fullNameTooShort)
     .required('Full name must be at least 3 characters'),
   size: Yup.string()
-    .oneOf(['small', 'medium', 'large'], validationErrors.sizeIncorrect)
+    .oneOf(['S', 'M', 'L'], validationErrors.sizeIncorrect)
     .required('Size is required'),
   toppings: Yup.array().of(Yup.string())
 });
@@ -38,6 +38,7 @@ export default function Form() {
   const [isValid, setIsValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
+  const pizzaSizes = { s: "small", m: "medium", l: "large" }
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -99,7 +100,7 @@ export default function Form() {
       {submitted && orderDetails && (
         <div className='success'>
           Thank you for your order, {orderDetails.fullname}!<br />
-          Your {orderDetails.size.toLowerCase()} pizza
+          Your {pizzaSizes[orderDetails.size.toLowerCase()]} pizza
           {orderDetails.toppings.length === 0
             ? ' with no toppings'
             : ` with ${orderDetails.toppings} toppings. `}
@@ -127,9 +128,9 @@ export default function Form() {
           <label htmlFor="size">Size</label><br />
           <select id="size" name="size" value={formData.size} onChange={handleChange}>
             <option value="">----Choose Size----</option>
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
+            <option value="S">Small</option>
+            <option value="M">Medium</option>
+            <option value="L">Large</option>
           </select>
         </div>
         {errors.size && <div className='error'>{errors.size}</div>}
